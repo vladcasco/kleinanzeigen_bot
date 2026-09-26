@@ -98,7 +98,11 @@ def fetch_listings(search_url):
     print(f"[debug] {search_url} -> найдено article[data-adid]: {len(new_items)}")
     if new_items:
         first = new_items[0]
-        print(f"[debug] Полный HTML первого article: {str(first)[:3500]}")
+        # убираем svg-иконки (занимают много места и не несут полезных данных)
+        first_copy = BeautifulSoup(str(first), "html.parser")
+        for svg in first_copy.find_all("svg"):
+            svg.decompose()
+        print(f"[debug] HTML первого article (без svg): {str(first_copy)[:3000]}")
     # --- КОНЕЦ ДИАГНОСТИКИ ---
 
     for item in items:
