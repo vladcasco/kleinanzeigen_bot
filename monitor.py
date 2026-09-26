@@ -99,8 +99,22 @@ def fetch_listings(search_url):
         f"размер ответа: {len(resp.text)} байт, найдено элементов: {len(items)}"
     )
     if len(items) == 0:
-        snippet = resp.text[:500].replace("\n", " ")
-        print(f"[debug] Начало HTML-ответа: {snippet}")
+        lower = resp.text.lower()
+        markers = [
+            "data-adid", "adid", "ad-listitem", "aditem",
+            "__next_data__", "srchrslt", "search-result",
+            '"ads":', '"items":', '"results":', "articleid",
+        ]
+        counts = {m: lower.count(m) for m in markers}
+        print(f"[debug] Маркеры в ответе: {counts}")
+
+        idx = lower.find("adid")
+        if idx != -1:
+            context = resp.text[max(0, idx - 150): idx + 350].replace("\n", " ")
+            print(f"[debug] Контекст вокруг 'adid': ...{context}...")
+        else:
+            print("[debug] Подстрока 'adid' вообще не найдена в ответе — данные объявлений, "
+                  "видимо, закодированы иначе или подгружаются отдельным запросом.")
     # --- КОНЕЦ ДИАГНОСТИКИ ---
 
     for item in items:
