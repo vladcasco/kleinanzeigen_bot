@@ -93,28 +93,12 @@ def fetch_listings(search_url):
     listings = []
     items = soup.select("li.ad-listitem[data-adid]") or soup.select("article.aditem")
 
-    # --- ВРЕМЕННАЯ ДИАГНОСТИКА ---
-    print(
-        f"[debug] {search_url} -> HTTP {resp.status_code}, "
-        f"размер ответа: {len(resp.text)} байт, найдено элементов: {len(items)}"
-    )
-    if len(items) == 0:
-        lower = resp.text.lower()
-        markers = [
-            "data-adid", "adid", "ad-listitem", "aditem",
-            "__next_data__", "srchrslt", "search-result",
-            '"ads":', '"items":', '"results":', "articleid",
-        ]
-        counts = {m: lower.count(m) for m in markers}
-        print(f"[debug] Маркеры в ответе: {counts}")
-
-        idx = lower.find("adid")
-        if idx != -1:
-            context = resp.text[max(0, idx - 150): idx + 350].replace("\n", " ")
-            print(f"[debug] Контекст вокруг 'adid': ...{context}...")
-        else:
-            print("[debug] Подстрока 'adid' вообще не найдена в ответе — данные объявлений, "
-                  "видимо, закодированы иначе или подгружаются отдельным запросом.")
+    # --- ВРЕМЕННАЯ ДИАГНОСТИКА (новая вёрстка сайта) ---
+    new_items = soup.select("article[data-adid]")
+    print(f"[debug] {search_url} -> найдено article[data-adid]: {len(new_items)}")
+    if new_items:
+        first = new_items[0]
+        print(f"[debug] Полный HTML первого article: {str(first)[:3500]}")
     # --- КОНЕЦ ДИАГНОСТИКИ ---
 
     for item in items:
