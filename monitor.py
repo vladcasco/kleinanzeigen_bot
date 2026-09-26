@@ -11,8 +11,11 @@ from bs4 import BeautifulSoup
 # Можно добавить сколько угодно ссылок в список.
 # =========================================================
 SEARCH_URLS = [
-    "https://www.kleinanzeigen.de/s-villeroy-boch/k0",
-    "https://www.kleinanzeigen.de/s-geschirr-zu-verschenken/k0",
+    "https://www.kleinanzeigen.de/s-muenchen/geschirr/k0l6411r50",
+    "https://www.kleinanzeigen.de/s-muenchen/villeroy-boch/k0l6411r50",
+    "https://www.kleinanzeigen.de/s-muenchen/rosenthal/k0l6411r50",
+    "https://www.kleinanzeigen.de/s-muenchen/geschirr-zu-verschenken/k0l6411r50",
+    "https://www.kleinanzeigen.de/s-muenchen/porzellan-vintage/k0l6411r50",
 ]
 
 STATE_FILE = "seen_ads.json"
