@@ -93,6 +93,16 @@ def fetch_listings(search_url):
     listings = []
     items = soup.select("li.ad-listitem[data-adid]") or soup.select("article.aditem")
 
+    # --- ВРЕМЕННАЯ ДИАГНОСТИКА ---
+    print(
+        f"[debug] {search_url} -> HTTP {resp.status_code}, "
+        f"размер ответа: {len(resp.text)} байт, найдено элементов: {len(items)}"
+    )
+    if len(items) == 0:
+        snippet = resp.text[:500].replace("\n", " ")
+        print(f"[debug] Начало HTML-ответа: {snippet}")
+    # --- КОНЕЦ ДИАГНОСТИКИ ---
+
     for item in items:
         ad_id = item.get("data-adid")
         link_tag = item.select_one("a.ellipsis") or item.select_one("h2 a")
